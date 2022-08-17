@@ -222,7 +222,7 @@ public class RandomUtilsTest {
         String arrayAsStr = Arrays.toString(array);
 
         // When
-        Integer[] newArray = RandomUtils.shuffleArray(array);
+        Integer[] newArray =  RandomUtils.shuffleArray(array);
         String newArrayAsStr = Arrays.toString(newArray);
 
         // Then

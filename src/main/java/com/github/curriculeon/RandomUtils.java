@@ -1,15 +1,10 @@
 package com.github.curriculeon;
 
-import com.sun.org.apache.bcel.internal.generic.ARRAYLENGTH;
-import com.sun.xml.internal.bind.v2.runtime.unmarshaller.XsiNilLoader;
-
-import javax.swing.text.html.parser.Element;
 import java.awt.*;
 import java.lang.reflect.Array;
-import java.time.LocalDate;
-import java.util.Date;
+import java.util.*;
 import java.util.List;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
 /**
  * Created by Leon on 2/4/2017.
@@ -38,13 +33,14 @@ public final class RandomUtils {
      */
     public static Character createCharacter(char min, char max) {
         Character result;
-        String alphabet = "abcdefghijklmnopqrstuvwxyz";
-        int abcLength = alphabet.length(); //not used.
+//        String alphabet = "abcdefghijklmnopqrstuvwxyz";
+//        int abcLength = alphabet.length(); //not used.
+        //maxValue = alphabet.indexOf(max);
+        //int minValue = alphabet.indexOf(min);
+        //                result = alphabet.charAt(random.nextInt(maxValue - minValue) + minValue);
 
-        int maxValue = alphabet.indexOf(max);
-        int minValue = alphabet.indexOf(min);
 
-        result = alphabet.charAt(random.nextInt(maxValue - minValue) + minValue);
+        result = (char) createInteger(min, max).intValue();
 
 
         return result;
@@ -58,7 +54,7 @@ public final class RandomUtils {
     public static Float createFloat(float min, float max) {
 
 
-        return random.nextFloat() * (max - min) + min;
+        return createDouble(min, max).floatValue();
     }
 
     /**
@@ -72,21 +68,17 @@ public final class RandomUtils {
      * @return a random integer between the specified min and max numeric range
      */
     public static Integer createInteger(int min, int max) {
-        Integer result;
-        result = random.nextInt(max - min) + min;
-        return result;
+//        Integer result;
+//        result = random.nextInt(max - min) + min;
+        return createDouble(min, max).intValue();
     }
 
     /**
      * @return a random long between the specified min and max numeric range
      */
     public static Long createLong(long min, long max) {
-        long result;
-        int longToMaxInt = (int) max;
-        int longToMinInt = (int) min;
 
-        result = random.nextInt(longToMaxInt - longToMinInt) + longToMinInt;
-        return result;
+        return createDouble(min, max).longValue();
     }
 
     /**
@@ -119,9 +111,8 @@ public final class RandomUtils {
      */
     public static Date createDate(Number minYear, Number maxYear) {
         Date result;
-        int minimumYear = (int) minYear;
-        int maximumYear = (int) maxYear;
-        int rangedYear = createInteger(minimumYear, maximumYear);
+
+        int rangedYear = createInteger((int) minYear, (int) maxYear);
 
         int randomDay = random.nextInt(31);
         int randomMonth = random.nextInt(12) - 1;
@@ -136,8 +127,12 @@ public final class RandomUtils {
      * @return random date between the specified `minDate` and `maxDate`
      */
     public static Date createDate(Date minDate, Date maxDate) {
+        long theMinimum = minDate.getTime();
+        long theMaximum = maxDate.getTime();
 
-        return null;
+        long randomDate = createLong(theMinimum, theMaximum);
+        Date date = new Date(randomDate);
+        return date;
     }
 
     /**
@@ -182,7 +177,16 @@ public final class RandomUtils {
      * @return shuffles the specified string array
      */
     public static <AnyType> AnyType[] shuffleArray(AnyType[] array) {
-        return null;
+        List<AnyType> arrayList = Arrays.asList(array);
+        Collections.shuffle(arrayList);
+        //want to move sorted array list back into the array.
+        for (int i = 0; i < array.length; i++) {
+            AnyType randomGet = arrayList.get(i);
+            array[i] = randomGet;
+        }
+
+        return array;
+
     }
 
     /**
@@ -194,7 +198,6 @@ public final class RandomUtils {
         int randomBlue = random.nextInt(maxBlue);
 
 
-        Color result = new Color(randomRed, randomGreen, randomBlue);
-        return result;
+        return new Color(randomRed, randomGreen, randomBlue);
     }
 }
