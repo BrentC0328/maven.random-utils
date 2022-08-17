@@ -142,9 +142,10 @@ public final class RandomUtils {
      */
     public static <AnyType> AnyType selectElement(AnyType[] array) {
         int arrayLength = Array.getLength(array);
-        Object theElement = Array.get(array, random.nextInt(arrayLength));
+        int randomNumber = random.nextInt(arrayLength);
 
-        AnyType result = (AnyType) theElement;
+        AnyType result = array[randomNumber];
+
         return result;
     }
 
